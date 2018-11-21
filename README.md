@@ -1,7 +1,7 @@
 # Ramping Behaviour Analysis
 ## Ramping Behavior Analysis (RBA) is an event detection technique for time-series data. The RBA extracts events from the time varying data. The events have five contours: peaks, up-ramp, down-ramp, rise time and fall time. 
 
-### The RBA project has two phases. This repository is based on the firtst phase. 
+### The RBA project has two phases.
 ### Phase 1: RBA developement in MATLAB environment
 ### Phase 2: RBA_theta developement in Python environment
 
