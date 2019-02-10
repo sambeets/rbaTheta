@@ -1,0 +1,89 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{geometry}
+ \geometry{ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm }
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{multirow}
+\usepackage{arydshln}
+\usepackage{mathtools}
+\usepackage{cite}
+\usepackage{float} % privides the H option
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{mathptmx,mathtools}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\allowdisplaybreaks
+
+
+\begin{document}
+
+\title{Improved Ramping Behaviour Analysis model \\ for scenario generation using Markov-chain}
+\author{
+        Sambeet Mishra, Esin Oren and Ivo Palu\\
+    Tallinn University of Technology, Tallinn, Estonia
+}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+Power generation from wind farm varies with time. This power swing increases the challenges in full utilization of the resource. The power system planner need to ensure supply of power on demand. Accurate estimation of power production from non-dispatchable resources such as wind is essential for the planner to ensure the supply-demand balance and reserve power capacity. 
+This paper investigates the power swings and introduces improved ramping behavior analysis model namely RBA$_\theta$. The objective of the proposed model is to quantify the variations as events. Each event is described through parameters- Up-ramp, Down-ramp, Peak, Frequency and Persistence. For this investigation, wind power production data is obtained from a wind farm containing 8 turbines. The data is normalized and scaled between 0 and 1. The geographical location of are synthesized from coastal region of Estonia. In first step, the events are extracted from the time-series wind power production data. In step two, the rain-flow counting algorithm is used to identify the cycles in the time-series data. These cycles explain if a noticeable pattern occurs multiple times in the data.  
+Subsequently in step 3, a spatial Markov chain is implemented that takes the location as input and produce a matrix of transition probabilities. Then in step 4, the sequence of events are predicted with reference to time. Subsequently in final step, the transition matrices containing spatial information and time-series events are combined to generate scenarios that are- most likely, least likely and probable. The scenarios are generated for a long term and short term period. A comparative analysis between temporal scenarios and spatio-temporal scenarios is presented to outline the importance of the proposed method. 
+\end{abstract}
+
+
+
+\begin{description}[noitemsep]
+\item[Nomenclature] 
+\item[RBA]	Ramping Behaviour Analysis
+\end{description}
+
+
+\input{./sec/introduction.tex}
+\input{./sec/literature.tex}
+
+
+\input{./sec/Modelling.tex}
+
+\subsection{RBA$_\theta$ Frequency and Persistence} \label{ss:persistence}
+\input{./sec/Persistence.tex}
+
+\subsection{Rainflow Counting Cycle for Event extraction} \label{ssec:rainflow}
+\input{./sec/Rainflow.tex}
+
+\section{Time-series Prediction using Deep Learning }
+\label{ssec:lstm}
+\input{./sec/Prediction.tex}
+
+
+\section{Spatial Markov Chain applications} \label{sec:markov}
+\input{./sec/markov.tex}
+
+\section{Scenario generation through spatial Markov transition matrices}
+\label{sec:scen}
+\input{./sec/Scenario.tex}
+
+%\section{Results}\label{results}
+%\input{./sec/Results.tex}
+
+\section{Conclusion} \label{conclusion}
+\input{./sec/conc.tex}
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{citations}
+
+\end{document}
+
