@@ -1,0 +1,23 @@
+Rainflow counting algorithm \cite{downing1982simple} was developed to be used in the analysis of fatigue data in order to reduce a spectrum of varying stress into a set of simple stress reversals. The input to the algorithm is a simple series of peaks and valleys i.e., local maxima and minima, that form hysteresis loops. Closed loops are full cycles, and open loops are half cycles. The algorithm uses a change in slope as an indicator that the time series is going through a peak or valley. Only the magnitude of the peak or valley is then entered into the Rainflow counting algorithm.
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{ccc} \hline
+Events & $w_s^t$ & Cycles \\ \hline
+01	&	0.218	&	0.5\\
+02	&	-0.355	&	0.5\\
+03	&	0.201	&	1\\
+04	&	-0.558	&	1\\
+05	&	-0.415	&	0.5\\
+06	&	0.241	&	0.5\\
+07	&	0.468	&	0.5\\
+08	&	-0.168	&	1\\
+09	&	-0.231	&	1\\
+10	&	0.422	&	0.5\\
+\hline
+\end{tabular}
+\caption{Rainflow counting cycle for first ten events}
+\label{tbl:rainflow}
+\end{table}
+
+It was implemented as presented in \cite{rinker2014including}. This algorithm is used to extract the cycles, with modifications to extract the starting and ending points of ramp events hence the time range, the starting and ending power of the events hence the amplitude, the angle of the event and the cycle with some minor modifications. A sample parameter values for the rainflow counting cycle is presented in the table \ref{tbl:rainflow}. The full cycles are presented as 1 and half-cycles as 0.5. For example, the events 3 and 4 have full cycles. 
