@@ -1,1 +1,2 @@
-
+# Repository set up on 10-2-2019
+# Next update: LSTM script for prediction: 16 Feb 2019
