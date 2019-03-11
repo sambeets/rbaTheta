@@ -9,13 +9,13 @@ make the functions seperate .py
     Peak, time it happened, up-time, down-time, ampliture, threshold ?
     
     Organize the LateX pdf file. [Esin]
-DEADLINE : 10/3/19
+DEADLINE : 13/3/19
 
     a reference: https://github.com/yeara/Persistence1D 
     Frequency and persistence?
       Persistence: Can they overlap? How to decide what is persisting?
     Rainflow counting? -> figure to draw rainflow cycles, add the link for the figure in matlab
-DEADLINE : 12/3/19
+DEADLINE : 15/3/19
 
 3. Run the tests to answer the questions on how RBA functions and what kind of questions it can answer [Sambeet]
     Test with script + write on LaTeX
@@ -26,7 +26,7 @@ DEADLINE : 17/3/19
     Mathematical explanation of markov chain and transition matrix [Sambeet]
     Find linking points numberically to establish how both time and space matters here 
     (transition matrix and queen plot). [Esin]
-DEADLINE : 15/3/19[Esin]  17/3/19[Sambeet]
+DEADLINE : 17/3/19[Esin]  17/3/19[Sambeet]
 
 5. Scenario generation [Sambeet + Esin]
     5.1 Should we predict the time series and then extract the RBA events to verify how good is the prediction?
