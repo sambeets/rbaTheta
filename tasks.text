@@ -9,6 +9,13 @@ make the functions seperate .py
     Peak, time it happened, up-time, down-time, ampliture, threshold ?
     
     Organize the LateX pdf file. [Esin]
+    
+Things to compare:
+1) RBA vs fft-RBA vs Bspline-RBA vs Bspline-fft-rba
+2) Different fc values
+3) different s and k values
+4) different threhold
+    
 DEADLINE : 13/3/19
 
     a reference: https://github.com/yeara/Persistence1D 
