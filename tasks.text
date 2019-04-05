@@ -16,33 +16,34 @@ Things to compare:
 3) different s and k values
 4) different threhold
     
-DEADLINE : 23/3/19
+DEADLINE : 6/4/19
 
     a reference: https://github.com/yeara/Persistence1D 
     Frequency and persistence?
       Persistence: Can they overlap? How to decide what is persisting?
-DEADLINE : 23/3/19
-    Rainflow counting? -> figure to draw rainflow cycles, add the link for the figure in matlab
 
+    Rainflow counting? -> figure to draw rainflow cycles, add the link for the figure in matlab
+DEADLINE : 6/4/19
 
 3. Run the tests to answer the questions on how RBA functions and what kind of questions it can answer [Sambeet]
     Test with script + write on LaTeX
     Check if we are missing some functionality to better explain an event & update [Sambeet+ Esin]
-DEADLINE : 26/3/19
+DEADLINE : 7/4/19
 
 4. Linking Spatial markov chain: How markov chain is linked to RBA ? [Sambeet+ Esin]
     Mathematical explanation of markov chain and transition matrix [Sambeet]
     Find linking points numberically to establish how both time and space matters here 
     (transition matrix and queen plot). [Esin]
-DEADLINE : 28/3/19[Esin]  28/3/19[Sambeet]
+DEADLINE : 10/4/19[Esin]  10/4/19[Sambeet]
 
 5. Scenario generation [Sambeet + Esin]
     5.1 Should we predict the time series and then extract the RBA events to verify how good is the prediction?
     or Should we predict the RBA events directly?
       a. Prediction of ramp event (peak, time it happen, up-time, down-time) using ML (Sambeet/Esin)
       LSTM
+      DEADLINE : 14/4/19 
     5.2 Apply reverse Markov to generate scenarios
-DEADLINE : 5/4/19   
+  DEADLINE : 18/4/19 
 
 #points that needs to be explained
 difference between the end of one event and the beginning of the next event
