@@ -293,7 +293,7 @@ def save_xls(dict_df, path):
     writer.save()
 
 
-def pre_markov(major_events, stationary_events):
+def pre_markov(significant_events, stationary_events):
     """
     takes in the output of RBA_theta
     gives out the matrices that will go into markov()
@@ -307,7 +307,7 @@ def pre_markov(major_events, stationary_events):
     This way all series of parameters for turbines coincide.
     """
 
-    '''n = len(major_events)  # number of turbines
+    '''n = len(significant_events)  # number of turbines
     columns = [f'Turbine_{i}' for i in range(1, n + 1)]
 
     # initializing the attribute dfs with 0 when there is no event
@@ -317,17 +317,17 @@ def pre_markov(major_events, stationary_events):
     sigma_m = pd.DataFrame(np.zeros((tao, n)), columns=columns)
 
     for i in range(1, n + 1):
-        k = len(major_events[f'Turbine_{i}'])
+        k = len(significant_events[f'Turbine_{i}'])
         for m in range(k):
-            if math.isnan(major_events[f'Turbine_{i}'].loc[m, 't1']):
+            if math.isnan(significant_events[f'Turbine_{i}'].loc[m, 't1']):
                 break
             else:
-                a = int(major_events[f'Turbine_{i}'].loc[m, 't1'])
-                b = int(major_events[f'Turbine_{i}'].loc[m, 't2'])
-                deltat_m.iloc[a:b, int(i - 1)] = major_events[f'Turbine_{i}'].loc[m, '∆t_m']
-                deltaw_m.iloc[a:b, int(i - 1)] = major_events[f'Turbine_{i}'].loc[m, '∆w_m']
-                theta_m.iloc[a:b, int(i - 1)] = major_events[f'Turbine_{i}'].loc[m, 'θ_m']
-                sigma_m.iloc[a:b, int(i - 1)] = major_events[f'Turbine_{i}'].loc[m, 'σ_m']
+                a = int(significant_events[f'Turbine_{i}'].loc[m, 't1'])
+                b = int(significant_events[f'Turbine_{i}'].loc[m, 't2'])
+                deltat_m.iloc[a:b, int(i - 1)] = significant_events[f'Turbine_{i}'].loc[m, '∆t_m']
+                deltaw_m.iloc[a:b, int(i - 1)] = significant_events[f'Turbine_{i}'].loc[m, '∆w_m']
+                theta_m.iloc[a:b, int(i - 1)] = significant_events[f'Turbine_{i}'].loc[m, 'θ_m']
+                sigma_m.iloc[a:b, int(i - 1)] = significant_events[f'Turbine_{i}'].loc[m, 'σ_m']
 
     deltat_s = pd.DataFrame(np.zeros((tao, n)), columns=columns)
     sigma_s = pd.DataFrame(np.zeros((tao, n)), columns=columns)
@@ -353,7 +353,7 @@ def pre_markov(major_events, stationary_events):
     stationary_attr['∆t_s'] = np.array([mc.Quantiles(y, k=5).yb for y in deltat_s.values]).transpose()
     stationary_attr['σ_s'] = np.array([mc.Quantiles(y, k=5).yb for y in sigma_s.values]).transpose()'''
 
-    n = len(major_events)  # number of turbines
+    n = len(significant_events)  # number of turbines
     columns = [f'Turbine_{i}' for i in range(1, n + 1)]
 
     # initializing the attribute dfs with 0 when there is no event
@@ -363,10 +363,10 @@ def pre_markov(major_events, stationary_events):
     sigma_m = pd.DataFrame(columns=columns)
 
     for i in range(1, n + 1):
-        deltat_m[f'Turbine_{i}'] = major_events[f'Turbine_{i}']['∆t_m']
-        deltaw_m[f'Turbine_{i}'] = major_events[f'Turbine_{i}']['∆w_m'] * 100
-        theta_m[f'Turbine_{i}'] = major_events[f'Turbine_{i}']['θ_m']
-        sigma_m[f'Turbine_{i}'] = major_events[f'Turbine_{i}']['σ_m'] * 100
+        deltat_m[f'Turbine_{i}'] = significant_events[f'Turbine_{i}']['∆t_m']
+        deltaw_m[f'Turbine_{i}'] = significant_events[f'Turbine_{i}']['∆w_m'] * 100
+        theta_m[f'Turbine_{i}'] = significant_events[f'Turbine_{i}']['θ_m']
+        sigma_m[f'Turbine_{i}'] = significant_events[f'Turbine_{i}']['σ_m'] * 100
 
     deltat_m = deltat_m.dropna()
     deltaw_m = deltaw_m.dropna()

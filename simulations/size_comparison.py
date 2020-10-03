@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri June 26 19:57:40 2020
 
-@author: aflatus
+"""
+Comparison of size of the original array and the events representation
 """
 
 import pandas as pd

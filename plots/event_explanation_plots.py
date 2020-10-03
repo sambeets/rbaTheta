@@ -7,7 +7,7 @@ import core.model
 from core.helpers import save_xls, pre_markov, normalize
 
 
-path1 = r'simulations/test_results/all_events/major_events_T_0.1.xlsx'
+path1 = r'simulations/test_results/all_events/significant_events_T_0.1.xlsx'
 path2 = r'simulations/test_results/all_events/stationary_events_T_0.1.xlsx'
 excel1 = pd.ExcelFile(path1)
 excel2 = pd.ExcelFile(path2)

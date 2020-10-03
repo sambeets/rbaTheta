@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 8 21:16:34 2020
-
-@author: aflatus
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -14,7 +7,7 @@ nominal = 2500
 original = pd.read_excel(r'C:\Users\EsinÖren\Dropbox\RBA theta\RBA_theta\code\input_data\8_wind_turbine_data.xlsx', sheet_name=0).values
 
 
-path1 = r'C:\Users\EsinÖren\Dropbox\RBA theta\RBA_theta\code\test_results\all_events\major_events_T_0.15_fc_0.3.xlsx'
+path1 = r'C:\Users\EsinÖren\Dropbox\RBA theta\RBA_theta\code\test_results\all_events\significant_events_T_0.15_fc_0.3.xlsx'
 path2 = r'C:\Users\EsinÖren\Dropbox\RBA theta\RBA_theta\code\test_results\all_events\stationary_events_T_0.15_fc_0.3.xlsx'
 excel1 = pd.ExcelFile(path1)
 excel2 = pd.ExcelFile(path2)

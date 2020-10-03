@@ -23,7 +23,7 @@ nominal = 2.5
 original = pd.read_excel(r'input_data\new_8_wind_turbine_data.xlsx', sheet_name=0)
 original = original.iloc[:, 1:].values
 
-path1 = r'simulations\test_results\all_events\major_events_T_0.1.xlsx'
+path1 = r'simulations\test_results\all_events\significant_events_T_0.1.xlsx'
 path2 = r'simulations\test_results\all_events\stationary_events_T_0.1.xlsx'
 
 excel1 = pd.ExcelFile(path1)

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Sep 20 12:02:10 2020
-
-@author: aflatus
-"""
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,7 +23,7 @@ plt.rc('xtick', labelsize=10)
 plt.rc('ytick', labelsize=10)
 
 
-path1 = os.path.join(BASE_DIR, 'simulations/test_results/all_events/major_events_T_0.1.xlsx')
+path1 = os.path.join(BASE_DIR, 'simulations/test_results/all_events/significant_events_T_0.1.xlsx')
 path2 = os.path.join(BASE_DIR, 'simulations/test_results/all_events/stationary_events_T_0.1.xlsx')
 excel1 = pd.ExcelFile(path1)
 excel2 = pd.ExcelFile(path2)

@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May  5 22:37:34 2020
-
-@author: Sambeet
-"""
-
 import numpy as np
 import pandas as pd
 from matplotlib import cm
@@ -28,7 +21,7 @@ plt.rc('ytick', labelsize=15)
 #%%
 # data import
 input = pd.read_excel(r'all_events/8_wind_turbine_data.xlsx')
-major_event = pd.read_excel(r'all_events/major_events_T_0.15_fc_0.3.xlsx')
+major_event = pd.read_excel(r'all_events/significant_events_T_0.15_fc_0.3.xlsx')
 tt1 = pd.read_excel(r'all_events/t.xlsx') #t1 of all events
 
 #%%

@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon May 18 16:40:00 2020
 
-@author: aflatus
+"""
+Markovian chain for the geospatial location probabilities
 """
 
 import time
@@ -15,7 +13,7 @@ from core.helpers import save_xls, pre_markov, normalize
 
 
 shp_file = r'docs/QGISfiles/wind_park_thiessen.shp'
-path1 = r'test_results/all_events/major_events_T_0.1.xlsx'
+path1 = r'test_results/all_events/significant_events_T_0.1.xlsx'
 path2 = r'test_results/all_events/stationary_events_T_0.1.xlsx'
 excel1 = pd.ExcelFile(path1)
 excel2 = pd.ExcelFile(path2)

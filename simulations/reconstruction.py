@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri June 26 12:07:08 2020
 
-@author: aflatus
+"""
+Reconstructing the original time-series array from the events
 """
 
 import pandas as pd
@@ -30,15 +28,15 @@ def limit_func(df, end):
             break
     return df.iloc[:stop, :]
 
-major_events = limit_func(end=length, df= major_data)
+significant_events = limit_func(end=length, df= major_data)
 
 x, y = [], []
 
-for i in range(len(major_events)):
-    start = int(major_events.loc[i, 't1'])
-    stop = int(major_events.loc[i, 't2'])
-    start_amp = major_events.loc[i, 'w_m(t1)'] * nominal
-    stop_amp = major_events.loc[i, 'w_m(t2)'] * nominal
+for i in range(len(significant_events)):
+    start = int(significant_events.loc[i, 't1'])
+    stop = int(significant_events.loc[i, 't2'])
+    start_amp = significant_events.loc[i, 'w_m(t1)'] * nominal
+    stop_amp = significant_events.loc[i, 'w_m(t2)'] * nominal
     num = stop - start
     time_span = np.linspace(start=start, num=num + 1, stop=stop)
     section = np.linspace(start=start_amp, num=num + 1, stop=stop_amp)
@@ -104,17 +102,17 @@ def limit_func(df, end):
 loop_over = (len(original_data) // length) + 1
 splined = []
 for m in range(loop_over):
-    major_events, stop = limit_func(end=length*(m+1), df= major_data)
-    print(major_events)
+    significant_events, stop = limit_func(end=length*(m+1), df= major_data)
+    print(significant_events)
     major_data = major_data.iloc[stop:, :].reset_index()
 
     x, y = [], []
 
-    for i in range(len(major_events)):
-        start = int(major_events.loc[i, 't1'])
-        stop = int(major_events.loc[i, 't2'])
-        start_amp = major_events.loc[i, 'w_m(t1)'] * nominal
-        stop_amp = major_events.loc[i, 'w_m(t2)'] * nominal
+    for i in range(len(significant_events)):
+        start = int(significant_events.loc[i, 't1'])
+        stop = int(significant_events.loc[i, 't2'])
+        start_amp = significant_events.loc[i, 'w_m(t1)'] * nominal
+        stop_amp = significant_events.loc[i, 'w_m(t2)'] * nominal
         num = stop - start
         time_span = np.linspace(start=start, num=num + 1, stop=stop)
         section = np.linspace(start=start_amp, num=num + 1, stop=stop_amp)
@@ -166,21 +164,21 @@ nominal = 2.5
 wind_data = pd.read_excel(input_path)
 original_data = wind_data.iloc[:, 1] #1st Turbine
 
-major_events = pd.read_excel(events_path, sheet_name='Turbine_1')
-print(sum(major_events['∆t_m']) / len(major_events))
+significant_events = pd.read_excel(events_path, sheet_name='Turbine_1')
+print(sum(significant_events['∆t_m']) / len(significant_events))
 y = []
 
-for i in range(len(major_events) - 1):
+for i in range(len(significant_events) - 1):
     if i == 0:
-        start = int(major_events.loc[i, 't1'])
+        start = int(significant_events.loc[i, 't1'])
         if start != 0:
             for k in range(len(start)):
                 y.append(None)
-    start = int(major_events.loc[i, 't1'])
-    stop = int(major_events.loc[i, 't2'])
-    next_start = int(major_events.loc[i + 1, 't1'])
-    start_amp = major_events.loc[i, 'w_m(t1)'] * nominal
-    stop_amp = major_events.loc[i, 'w_m(t2)'] * nominal
+    start = int(significant_events.loc[i, 't1'])
+    stop = int(significant_events.loc[i, 't2'])
+    next_start = int(significant_events.loc[i + 1, 't1'])
+    start_amp = significant_events.loc[i, 'w_m(t1)'] * nominal
+    stop_amp = significant_events.loc[i, 'w_m(t2)'] * nominal
     num = stop - start
     section = np.linspace(start=start_amp, num=num, stop=stop_amp)
     y.extend(section)
@@ -188,10 +186,10 @@ for i in range(len(major_events) - 1):
         for k in range(next_start - stop):
             y.append(None)
 
-start = int(major_events['t1'].iloc[-1])
-stop = int(major_events['t2'].iloc[-1])
-start_amp = major_events['w_m(t1)'].iloc[-1] * nominal
-stop_amp = major_events['w_m(t2)'].iloc[-1] * nominal
+start = int(significant_events['t1'].iloc[-1])
+stop = int(significant_events['t2'].iloc[-1])
+start_amp = significant_events['w_m(t1)'].iloc[-1] * nominal
+stop_amp = significant_events['w_m(t2)'].iloc[-1] * nominal
 num = stop - start
 time_span = np.linspace(start=start, num=num + 1, stop=stop)
 section = np.linspace(start=start_amp, num=num + 1, stop=stop_amp)
@@ -219,7 +217,7 @@ plt.legend(loc='best')
 plt.savefig('plotted_figures/recon.png', dpi =300, bbox_inches='tight')
 plt.show()
 
-print(len(major_events))
+print(len(significant_events))
 
 
 

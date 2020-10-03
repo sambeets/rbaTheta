@@ -34,34 +34,34 @@ def RBA_theta(data, nominal, s=0.01, k=3, fc=0.3, threshold=0.15):
         #filtered_data[turbines[i]] = fn.filter_blackman(data=normalized_data[turbines[i]], fc=fc)
 
     tao = len(normalized_data) + 1
-    major_events, stationary_events = {}, {}
+    significant_events, stationary_events = {}, {}
 
     for i in range(N):
         # sampling_time
-        major_events[turbines[i]] = ee.major_events(data=normalized_data[turbines[i]], threshold=threshold)
+        significant_events[turbines[i]] = ee.significant_events(data=normalized_data[turbines[i]], threshold=threshold)
         stationary_events[turbines[i]] = ee.stationary_events(data=normalized_data[turbines[i]], threshold=threshold)
 
 
     '''
     for i in range(N):
-        number_of_major_events = len(major_events[turbines[i]])
+        number_of_significant_events = len(significant_events[turbines[i]])
         number_of_stationary_events = len(stationary_events[turbines[i]])
 
         # initializing the rainflow counts
-        #major_events[turbines[i]]['φ_m'] = [0 * len(major_events[turbines[i]])]
+        #significant_events[turbines[i]]['φ_m'] = [0 * len(significant_events[turbines[i]])]
         #stationary_events[turbines[i]]['φ_s'] = [0 * len(stationary_events[turbines[i]])]
 
-        for k in range(number_of_major_events):
-            start = int(major_events[turbines[i]].loc[k, 't1'])
-            end = int(major_events[turbines[i]].loc[k, 't2'])
-            major_events[turbines[i]].loc[k, 'φ_m'] = fn.rainflow_count(data=data.iloc[i, start:end])
+        for k in range(number_of_significant_events):
+            start = int(significant_events[turbines[i]].loc[k, 't1'])
+            end = int(significant_events[turbines[i]].loc[k, 't2'])
+            significant_events[turbines[i]].loc[k, 'φ_m'] = fn.rainflow_count(data=data.iloc[i, start:end])
 
         for k in range(number_of_stationary_events):
             start = int(stationary_events[turbines[i]].loc[k, 't1'])
             end = int(stationary_events[turbines[i]].loc[k, 't2'])
             stationary_events[turbines[i]].loc[k, 'φ_s'] = fn.rainflow_count(data=data.iloc[i, start:end])
     '''
-    return [major_events, stationary_events, tao]
+    return [significant_events, stationary_events, tao]
 
 
 

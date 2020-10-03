@@ -1,36 +1,47 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sat May 16 18:47:10 2020
-
-@author: aflatus
+This is a fast test that takes a time series array and extacts significant and stationary events.
 """
 
 import time
 import os
 import pandas as pd
-import multiprocessing #magic
+import multiprocessing
 import core.model as model
 from core.helpers import save_xls
 
 
 def the_test(path):
+    """
 
+    Args:
+        path: path of the time series data input
+
+    Returns: significant and stationary events
+
+    """
 
     wind_data = pd.read_excel(path)
     wind_data = wind_data.iloc[:100, 1:]
 
-    [major_events, stationary_events, tao] = model.RBA_theta(data=wind_data,
+    [significant_events, stationary_events, tao] = model.RBA_theta(data=wind_data,
                                                                               nominal=2.5,
                                                                               s=0.01,
                                                                               k=3,
                                                                               fc=0.3,
                                                                               threshold=0.1)
 
-    save_xls(major_events, f'simulations/test_results/all_events/major_events_T_0.1.xlsx')
+    save_xls(significant_events, f'simulations/test_results/all_events/significant_events_T_0.1.xlsx')
     save_xls(stationary_events, f'simulations/test_results/all_events/stationary_events_T_0.1.xlsx')
 
 def threshold(path):
+    """
 
+    Args:
+        path: path is carried forward from previous function pointing the location of the times-series input array
+
+    Returns:
+
+    """
     wind_data = pd.read_excel(path)
     wind_data = wind_data.iloc[:, 1:]
 
@@ -38,16 +49,18 @@ def threshold(path):
     thresholds = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
     for t in thresholds:
-        [major_events, stationary_events, tao] = model.RBA_theta(data=wind_data,
+        [significant_events, stationary_events, tao] = model.RBA_theta(data=wind_data,
                                                                  nominal=2.5,
                                                                  s=0.01, k=3, fc=0.3, threshold=t)
 
-        save_xls(major_events, f'simulations/test_results/multiple_T/major_T{t}.xlsx')
+        save_xls(significant_events, f'simulations/test_results/multiple_T/major_T{t}.xlsx')
         save_xls(stationary_events, f'simulations/test_results/multiple_T/stationary_T{t}.xlsx')
 
 
 if __name__ == '__main__':
-
+    """
+    Multi-processing
+    """
     os.chdir('..')
     BASE_DIR = os.getcwd()
     path = os.path.join(BASE_DIR, r'input_data/new_8_wind_turbine_data.xlsx')

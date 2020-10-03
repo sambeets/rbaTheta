@@ -7,7 +7,7 @@ from itertools import compress
 from core.helpers import lam
 
 
-def major_events(data, threshold):
+def significant_events(data, threshold):
     """
     Finds the Major(higher than amplitude) events
     bins= number of bins that the range of parameters (∆a(-1,1), ∆t(1,max(∆t)), α(-90,90), mean(min(mean),max(mean))) will be divided into, to count the frequency of the events that fall into those bins
@@ -90,7 +90,7 @@ def major_events(data, threshold):
         m_events.append(new_event)
         start = i + 1
 
-    __major_events = pd.DataFrame(columns=['t1', 't2', '∆t_m', 'w_m(t1)', 'w_m(t2)', '∆w_m', 'σ_m', 'θ_m'])
+    __significant_events = pd.DataFrame(columns=['t1', 't2', '∆t_m', 'w_m(t1)', 'w_m(t2)', '∆w_m', 'σ_m', 'θ_m'])
     for event in m_events:
         new_row = [event[0],
                    event[1],
@@ -101,12 +101,12 @@ def major_events(data, threshold):
                    (event[2] + event[3]) / 2,
                    (np.arctan2((event[3] - event[2]) * 100, (event[1] - event[0]))) * 180 / np.pi]
 
-        __major_events = __major_events.append(pd.Series(new_row, index=__major_events.columns), ignore_index=True)
+        __significant_events = __significant_events.append(pd.Series(new_row, index=__significant_events.columns), ignore_index=True)
 
-    lambdas = lam(__major_events, threshold)
-    __major_events = pd.concat([__major_events, lambdas], axis=1)
+    lambdas = lam(__significant_events, threshold)
+    __significant_events = pd.concat([__significant_events, lambdas], axis=1)
 
-    return __major_events
+    return __significant_events
 
 
 def stationary_events(data, threshold):
