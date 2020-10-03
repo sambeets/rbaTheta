@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 15 18:43:46 2020
-
-@author: aflatus
-"""
+"""Helper function to aid the core functionalities"""
 from typing import Union
 
 import numpy as np
@@ -13,15 +8,15 @@ import math
 import mapclassify as mc
 
 def normalize(data, nominal):
-    '''
+    """
     Normalizes data between [0,1]
-    '''
+    """
     normalized = [x / nominal for x in data]
     return normalized
 
 
 def bspline(series, s, k):
-
+    """Data smoothing using b-spline"""
     x = np.arange(len(series))
     t, c, k = interpolate.splrep(x, series, s=s, k=k)
     # t=vector of knots, c=bspline coeff, k=degree of spline
@@ -240,9 +235,9 @@ def rainflow_count(data):
 
 
 def lam(events, threshold):
-    '''
+    """
     finds the frequency of occurence of the attributes in events, in the bins they are in.
-    '''
+    """
     number_of_bins = int(1 / threshold)
 
     # stationary events
@@ -299,10 +294,10 @@ def save_xls(dict_df, path):
 
 
 def pre_markov(major_events, stationary_events):
-    '''
-    #takes in the output of RBA_theta
-    #gives out the matrices that will go into markov()
-    #to coincide the events timewise for the turbines,since we have multpile turbines in different locations with varying events happening simultaneously or not,
+    """
+    takes in the output of RBA_theta
+    gives out the matrices that will go into markov()
+    to coincide the events timewise for the turbines,since we have multpile turbines in different locations with varying events happening simultaneously or not,
     it repeats the value of the parameter over the period of time
     that particular event occurs
     e.g say for the parameter '∆w_s', there are events between t=2
@@ -310,7 +305,7 @@ def pre_markov(major_events, stationary_events):
     the series of data for ∆w_s goes:
     0,0,0.3,0.3,0.3,0.3,0,0.15,0.15,...
     This way all series of parameters for turbines coincide.
-    '''
+    """
 
     '''n = len(major_events)  # number of turbines
     columns = [f'Turbine_{i}' for i in range(1, n + 1)]

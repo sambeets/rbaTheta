@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Jan 15 18:49:11 2020
-
-@author: aflatus
-"""
-""" 
 RBA_theta searches for variations in a dataset within and above a given Threshold. 
 """            
 import pandas as pd
@@ -14,14 +8,14 @@ from core.helpers import lam
 
 
 def major_events(data, threshold):
-    '''
+    """
     Finds the Major(higher than amplitude) events
     bins= number of bins that the range of parameters (∆a(-1,1), ∆t(1,max(∆t)), α(-90,90), mean(min(mean),max(mean))) will be divided into, to count the frequency of the events that fall into those bins
 
     Args:
-        data:
-        threshold:
-        bins:
+        data: time series array
+        threshold: floating value
+        bins: integers
 
     Returns: Major events with
         t1: beginning point of the major event
@@ -32,7 +26,7 @@ def major_events(data, threshold):
         ∆w_m: amplitude of the major event
         θ_m: angle of the major event
         σ_m: mean amplitude of the major event
-        '''
+    """
 
     prev = data[0]
     delta = []
@@ -116,6 +110,15 @@ def major_events(data, threshold):
 
 
 def stationary_events(data, threshold):
+    """
+
+    Args:
+        data: time series
+        threshold: floting value
+
+    Returns: starting point, ending point, time persisted for stationary events
+
+    """
     __stationary_events = pd.DataFrame(columns=['t1', 't2', '∆t_s', 'σ_s'])
     start = 0
     length = len(data)
@@ -287,7 +290,8 @@ def rainflow(data, threshold, flm=0, l_ult=1e16, uc_mult=0.5):
     angles=np.degrees(angles)
     array_out=np.c_[array_out,angles]
 
-    """   angles=[]
+    """ Not in use
+    angles=[]
     
     for i in range(len(array_out)):
         new=array_out[i,4]*10/array_out[i,5]

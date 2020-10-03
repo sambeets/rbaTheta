@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 18 18:38:44 2020
-
-@author: aflatus
-"""
+"""The rbaTheta model"""
 from giddy.markov import LISA_Markov, Spatial_Markov
 from libpysal.weights import Queen, DistanceBand
 import libpysal
@@ -13,7 +8,7 @@ import core.event_extraction as ee
 
 #sampling_time=1
 def RBA_theta(data, nominal, s=0.01, k=3, fc=0.3, threshold=0.15):
-    '''
+    """
     Args:
         data: discrete wind power (/hour) in Watts, from N turbines
         nominal: nominal production in Watts
@@ -24,7 +19,7 @@ def RBA_theta(data, nominal, s=0.01, k=3, fc=0.3, threshold=0.15):
         threshold:
     Returns:
         dictionary of [dataframe of events per turbines] x turbines
-    '''
+    """
 
     N = len(data.columns)
     turbines = []
@@ -72,11 +67,11 @@ def RBA_theta(data, nominal, s=0.01, k=3, fc=0.3, threshold=0.15):
 
 def markov(major, stationary, shp_path):
 
-    '''
+    """
     A commonly-used type of weights is Queen-contiguity weights, which reflects adjacency relationships as a binary
     indicator variable denoting whether or not a polygon shares an edge or a vertex with another polygon. These weights
     are symmetric.
-    '''
+    """
 
     df = geopandas.read_file(shp_path)
     points = [(poly.centroid.x, poly.centroid.y) for poly in df.geometry]
