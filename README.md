@@ -8,6 +8,8 @@ significace in context of decision making.
 ![rbaTheta](/plots/plotted_figures/RBAevents_new.png?raw=true)
 
 
+![significant](/plots/plotted_figures/allMajorEvents.png?raw=true)![stationary](/plots/plotted_figures/allStationaryEvents.png?raw=true)
+
 #### Directory organization
 
 | Directory | Files | Description |
