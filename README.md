@@ -20,10 +20,11 @@ significace in context of decision making.
 #### How to run?
 
 To execute simply execute the files in simulation folder. For example:
-> fast_test.py
+```
+fast_test.py
+```
 
-
-#### Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a permission or citation of the publication.
+> Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a permission or citation of the publication.
 
 
 
