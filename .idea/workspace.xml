@@ -19,10 +19,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9fa1b13a-7df5-410f-bcd0-a3a4f544da47" name="Default Changelist" comment="code refactoring">
+    <list default="true" id="9fa1b13a-7df5-410f-bcd0-a3a4f544da47" name="Default Changelist" comment="readme update">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations/fast_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations/fast_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations/test_results/all_events/stationary_events_T_0.1.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/simulations/test_results/all_events/stationary_events_T_0.1.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +101,7 @@
       <workItem from="1602624105096" duration="24000" />
       <workItem from="1602701546422" duration="20000" />
       <workItem from="1602720334519" duration="22000" />
-      <workItem from="1603041116867" duration="805000" />
+      <workItem from="1603041116867" duration="1142000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <created>1601550045686</created>
@@ -133,7 +131,21 @@
       <option name="project" value="LOCAL" />
       <updated>1601720183774</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="readme update">
+      <created>1603041936782</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1603041936782</updated>
+    </task>
+    <task id="LOCAL-00006" summary="readme update">
+      <created>1603041943499</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1603041943499</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,7 +167,8 @@
     <MESSAGE value="Test" />
     <MESSAGE value="test 02" />
     <MESSAGE value="code refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="code refactoring" />
+    <MESSAGE value="readme update" />
+    <option name="LAST_COMMIT_MESSAGE" value="readme update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="594" y="395" key="FileChooserDialogImpl" timestamp="1601720301954">
@@ -182,10 +195,10 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="244" y="261" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1601666323318" />
-    <state x="359" y="367" key="Vcs.Push.Dialog.v2" timestamp="1601720409695">
+    <state x="359" y="367" key="Vcs.Push.Dialog.v2" timestamp="1603041948356">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="359" y="367" key="Vcs.Push.Dialog.v2/0.0.3440.1400@0.0.3440.1400" timestamp="1601720409695" />
+    <state x="359" y="367" key="Vcs.Push.Dialog.v2/0.0.3440.1400@0.0.3440.1400" timestamp="1603041948356" />
     <state x="640" y="593" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603041241100">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>

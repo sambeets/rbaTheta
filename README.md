@@ -5,6 +5,8 @@ events than 24 points. This algorithm identifies the events and classifies them 
 An abrupt change is understood as significant event while a persistent event is a stationary. Rest of the data have little
 significace in context of decision making.
 
+![Screenshot](https://github.com/sambeets/rbaTheta/plots/RBAevents_new.jpg?raw=true)
+
 
 #### Directory organization
 
