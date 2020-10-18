@@ -1,21 +1,28 @@
-# Ramping Behaviour Analysis ($RBA_\theta$)
-## Ramping Behavior Analysis (RBA) is an event detection technique for time-series data. The RBA extracts events from the time varying data. The events have five contours: peaks, up-ramp, down-ramp, rise time and fall time. 
+# <h1> rbaTheta: Ramping Behaviour Analysis
 
-### The RBA project has two phases.
-### Phase 1: RBA developement in MATLAB environment
-### Phase 2: RBA_theta developement in Python environment
-
-
-## RBA_theta
-### RBA_theta builds on top of the phase 1 developement of RBA. The improvements include addition of parameters for event classification. The list of parameters for one event are: peaks, threshold, up-ramp, down-ramp, persistence, frequency, angle, rainflow counting cycles.
-
-### The developed RBA_theta model is applied for scenario generation of wind power events. 
-### The novel mechanism to utilize the spatial markov-chain transition matrix to generate scenarios of events based on probability of occurances. 
+Definition: A sudden change in time-varying data is termed as an event. For example a day (24 h) can be summed up with a few
+events than 24 points. This algorithm identifies the events and classifies them into stationary or significant events. 
+An abrupt change is understood as significant event while a persistent event is a stationary. Rest of the data have little
+significace in context of decision making.
 
 
-### Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a permission or citation of the publication.
+#### Directory organization
 
-### Code format
---core
+| Directory | Files | Description |
+| --- | --- | --- |
+| Core | event_extraction.py , helpers.py , model.py | Contains the model and associated files
+| input_data | QGISfiles, Wind files | Input excel and shape files
+| plots| plotted figures | plotting scripts and figures
+| simulations| test results and script to run tests | fast_test.py is for a simple test
+
+#### How to run?
+
+To execute simply execute the files in simulation folder. For example:
+> fast_test.py
+
+
+#### Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a permission or citation of the publication.
+
+
 
 

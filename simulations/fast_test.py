@@ -39,7 +39,7 @@ def threshold(path):
     Args:
         path: path is carried forward from previous function pointing the location of the times-series input array
 
-    Returns:
+    Returns: test results with a range of thresholds
 
     """
     wind_data = pd.read_excel(path)
