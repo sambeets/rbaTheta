@@ -24,7 +24,7 @@ To execute simply execute the files in simulation folder. For example:
 fast_test.py
 ```
 
-#### __Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a permission or citation of the publication.__
+#### __Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a explicit written permission or citation of the publication.__
 
 > [Mishra S, Ören E, Bordin C, Wen F, Palu I. Features extraction of wind ramp events from a virtual wind park. Energy Reports. 2020 Nov 1;6:237-49.](https://doi.org/10.1016/j.egyr.2020.08.047)
 ```
