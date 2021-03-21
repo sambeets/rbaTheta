@@ -1,8 +1,16 @@
-Developments 
+Continuous development process
+
+-- I/O format define
+Define an input and output format for the algorithm/package.
 
 -- Date-time integreation
 This functionality would allow to record the events within a specific time period.
 Say if events are actively occuring in weekend or weekday. 
+
+-- Frequency combinations
+Combine the features within an event.
+A combination of fetures define an event.
+Can we retain the combinations as well.
 
 -- Package the rbaTheta
 Turn the alogorithm to a package
@@ -11,7 +19,8 @@ Turn the alogorithm to a package
 This would enable a web page for the package 
 
 
+
 Open questions
 
 -- How to set the threshold?
-Is there a way we can determine a propser threshold?
+Is there a way we can determine an optimal threshold?
