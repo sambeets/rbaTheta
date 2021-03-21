@@ -1,0 +1,17 @@
+Developments 
+
+-- Date-time integreation
+This functionality would allow to record the events within a specific time period.
+Say if events are actively occuring in weekend or weekday. 
+
+-- Package the rbaTheta
+Turn the alogorithm to a package
+
+-- (optional) Sphynx 
+This would enable a web page for the package 
+
+
+Open questions
+
+-- How to set the threshold?
+Is there a way we can determine a propser threshold?
