@@ -24,14 +24,17 @@ def the_test(path):
     wind_data = wind_data.iloc[:100, 1:]
 
     [significant_events, stationary_events, tao] = model.RBA_theta(data=wind_data,
-                                                                              nominal=2.5,
-                                                                              s=0.01,
-                                                                              k=3,
-                                                                              fc=0.3,
-                                                                              threshold=0.1)
+                                                                   nominal=2.5,
+                                                                   s=0.01,
+                                                                   k=3,
+                                                                   fc=0.3,
+                                                                   threshold=0.1)
 
-    save_xls(significant_events, f'simulations/test_results/all_events/significant_events_T_0.1.xlsx')
-    save_xls(stationary_events, f'simulations/test_results/all_events/stationary_events_T_0.1.xlsx')
+    save_xls(significant_events,
+             f'simulations/test_results/all_events/significant_events_T_0.1.xlsx')
+    save_xls(stationary_events,
+             f'simulations/test_results/all_events/stationary_events_T_0.1.xlsx')
+
 
 def threshold(path):
     """
@@ -50,11 +53,12 @@ def threshold(path):
 
     for t in thresholds:
         [significant_events, stationary_events, tao] = model.RBA_theta(data=wind_data,
-                                                                 nominal=2.5,
-                                                                 s=0.01, k=3, fc=0.3, threshold=t)
-
-        save_xls(significant_events, f'simulations/test_results/multiple_T/major_T{t}.xlsx')
-        save_xls(stationary_events, f'simulations/test_results/multiple_T/stationary_T{t}.xlsx')
+                                                                       nominal=2.5,
+                                                                       s=0.01, k=3, fc=0.3, threshold=t)
+        save_xls(significant_events,
+                 f'simulations/test_results/multiple_T/significant_T{t}.xlsx')
+        save_xls(stationary_events,
+                 f'simulations/test_results/multiple_T/stationary_T{t}.xlsx')
 
 
 if __name__ == '__main__':
