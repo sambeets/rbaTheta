@@ -20,7 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fa1b13a-7df5-410f-bcd0-a3a4f544da47" name="Default Changelist" comment="readme update">
+      <change beforePath="$PROJECT_DIR$/.idea/RBA_theta.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RBA_theta.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulations/fast_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations/fast_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulations/test_results/all_events/significant_events_T_0.1.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/simulations/test_results/all_events/significant_events_T_0.1.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulations/test_results/all_events/stationary_events_T_0.1.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/simulations/test_results/all_events/stationary_events_T_0.1.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +44,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../B-CoMG" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -105,6 +110,7 @@
       <workItem from="1603136293860" duration="94000" />
       <workItem from="1603213470444" duration="77000" />
       <workItem from="1603270133940" duration="8000" />
+      <workItem from="1627818608910" duration="882000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <created>1601550045686</created>
@@ -208,52 +214,6 @@
     <MESSAGE value="readme update" />
     <option name="LAST_COMMIT_MESSAGE" value="readme update" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="2072" y="324" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1603213539771">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="2072" y="324" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1603213539771" />
-    <state x="594" y="395" key="FileChooserDialogImpl" timestamp="1603270140528">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="594" y="395" key="FileChooserDialogImpl/0.0.3440.1400@0.0.3440.1400" timestamp="1603270140528" />
-    <state width="1096" height="382" key="GridCell.Tab.0.bottom" timestamp="1603042978793">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state width="1096" height="382" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1603042978793" />
-    <state width="1096" height="382" key="GridCell.Tab.0.center" timestamp="1603042978793">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state width="1096" height="382" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1603042978793" />
-    <state width="1096" height="382" key="GridCell.Tab.0.left" timestamp="1603042978793">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state width="1096" height="382" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1603042978793" />
-    <state width="1096" height="382" key="GridCell.Tab.0.right" timestamp="1603042978793">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state width="1096" height="382" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1603042978793" />
-    <state x="244" y="261" key="SettingsEditor" timestamp="1601666323318">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="244" y="261" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1601666323318" />
-    <state x="728" y="592" key="VCS.EditChangelistDialog" timestamp="1603136347680">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="728" y="592" key="VCS.EditChangelistDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1603136347680" />
-    <state x="359" y="367" key="Vcs.Push.Dialog.v2" timestamp="1603042932268">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="359" y="367" key="Vcs.Push.Dialog.v2/0.0.3440.1400@0.0.3440.1400" timestamp="1603042932268" />
-    <state x="640" y="593" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603041241100">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="640" y="593" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.3440.1400@0.0.3440.1400" timestamp="1603041241100" />
-    <state x="509" y="200" width="716" height="999" key="find.popup" timestamp="1601719950585">
-      <screen x="0" y="0" width="3440" height="1400" />
-    </state>
-    <state x="509" y="200" width="716" height="999" key="find.popup/0.0.3440.1400@0.0.3440.1400" timestamp="1601719950585" />
-  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -266,7 +226,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/fast_test_py$fast_test.coverage" NAME="fast_test Coverage Results" MODIFIED="1627818973796" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/simulations" />
     <SUITE FILE_PATH="coverage/RBA_theta$fast_test.coverage" NAME="fast_test Coverage Results" MODIFIED="1601720346242" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/simulations" />
-    <SUITE FILE_PATH="coverage/fast_test_py$fast_test.coverage" NAME="fast_test Coverage Results" MODIFIED="1603041161618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/simulations" />
   </component>
 </project>

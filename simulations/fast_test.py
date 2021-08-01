@@ -1,7 +1,7 @@
 """
 This is a fast test that takes a time series array and extacts significant and stationary events.
 """
-
+# importing packages and created modules
 import time
 import os
 import pandas as pd
@@ -10,6 +10,7 @@ import core.model as model
 from core.helpers import save_xls
 
 
+# function to execute the test with one threshold
 def the_test(path):
     """
     Args:
@@ -33,7 +34,8 @@ def the_test(path):
              f'simulations/test_results/all_events/stationary_events_T_0.1.xlsx')
 
 
-def threshold(path):
+# function to test with multiple thresholds to select one that fits a particular data-set
+def threshold_test(path):
     """
     Args:
         path: path is carried forward from previous function pointing the location of the times-series input array
@@ -43,7 +45,7 @@ def threshold(path):
     wind_data = pd.read_excel(path)
     wind_data = wind_data.iloc[:, 1:]
 
-    # test wıth multıple thresholds
+    # test with multiple thresholds
     thresholds = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
     for t in thresholds:
@@ -58,7 +60,8 @@ def threshold(path):
 
 if __name__ == '__main__':
     """
-    Multi-processing
+    Multi-processing function to improve the processing time
+    Choice: the_test() or threshold_test()
     """
     os.chdir('..')
     BASE_DIR = os.getcwd()
