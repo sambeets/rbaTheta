@@ -12,12 +12,9 @@ from core.helpers import save_xls
 
 def the_test(path):
     """
-
     Args:
         path: path of the time series data input
-
     Returns: significant and stationary events
-
     """
 
     wind_data = pd.read_excel(path)
@@ -38,12 +35,10 @@ def the_test(path):
 
 def threshold(path):
     """
-
     Args:
         path: path is carried forward from previous function pointing the location of the times-series input array
 
     Returns: test results with a range of thresholds
-
     """
     wind_data = pd.read_excel(path)
     wind_data = wind_data.iloc[:, 1:]
@@ -71,7 +66,6 @@ if __name__ == '__main__':
 
     processes = [
         multiprocessing.Process(target=the_test(path)) for i in range(3)
-
     ]
     start_time = time.time()
     for p in processes:
