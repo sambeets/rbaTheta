@@ -11,10 +11,14 @@ path = os.path.join(BASE_DIR, r'input_data/new_8_wind_turbine_data.xlsx')
 
 
 def main(path):
+    """Main calls functions from core folder and pass to the multiprocessing function
 
-    # importing packages and created modules
+    Args:
+        path (directory): where input data is stored in xlsx format
 
-    # function to execute the test with one threshold
+    Returns:
+        [xlsx files]: save xlsx files with extracted events in the simulation folder  
+    """
 
     def the_test(path):
         """
@@ -39,7 +43,11 @@ def main(path):
                  f'simulations/test_results/all_events/stationary_events_T_0.1.xlsx')
 
     def multi_proc(path):
+        """creates a multi processing object from the specified function
 
+        Args:
+            path : directory path of the input file
+        """
         processes = [
             multiprocessing.Process(target=the_test(path)) for i in range(3)
         ]
