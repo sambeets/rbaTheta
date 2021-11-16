@@ -20,6 +20,22 @@ significace in context of decision making.
 
 To run an experiment execute the main.py file. It calls the model and helpers from core folder and exectues as a parallel process. To verify that the execution was successful, look out for the a message stating how long it took to execute on terminal.
 
+#### environment set up
+
+Export OS agnostic and multiple package managers environment from Windows by
+
+```
+conda env export --no-builds | findstr -v "prefix" > rba_non-spatial_environment.yml
+```
+
+create conda environment with dependencies
+
+```
+conda env create --name m_rba -f rba_non-spatial_environment.yml
+```
+
+To run simulations
+
 ```
 main.py
 ```

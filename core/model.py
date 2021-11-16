@@ -1,8 +1,8 @@
 """The rbaTheta model"""
-from giddy.markov import LISA_Markov, Spatial_Markov
-from libpysal.weights import Queen, DistanceBand
-import libpysal
-import geopandas
+#from giddy.markov import LISA_Markov, Spatial_Markov
+#from libpysal.weights import Queen, DistanceBand
+#import libpysal
+#import geopandas
 import core.helpers as fn
 import core.event_extraction as ee
 

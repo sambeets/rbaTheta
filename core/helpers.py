@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy.interpolate as interpolate
 import math
-import mapclassify as mc
+#import mapclassify as mc
 
 def normalize(data, nominal):
     """
