@@ -28,13 +28,13 @@ Export OS agnostic and multiple package managers environment from Windows by
 conda env export --no-builds | findstr -v "prefix" > rba_non-spatial_environment.yml
 ```
 
-create conda environment with dependencies
+create m_rba environment using conda with dependencies
 
 ```
 conda env create --name m_rba -f rba_non-spatial_environment.yml
 ```
 
-To run simulations
+To run simulations execute
 
 ```
 main.py
