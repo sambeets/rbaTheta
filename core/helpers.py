@@ -49,10 +49,12 @@ def filter_blackman(data, fc):
 
     return filtered
 
-def rainflow_count(data):
+def rainflow_count(data, threshold=0.1):  # Add threshold parameter
     '''
     Finds the total count of rainflow cycles in given data.
     '''
+    uc_mult = 0.5  # Fixed - this is good now
+    
     prev = data[0]
     delta = []
     for item in data[1:]:
@@ -74,7 +76,6 @@ def rainflow_count(data):
     maximum.append([data[len(data) - 1], len(data) - 1])
 
     # rainflow with Power range and time range of cycles
-
     l = len(maximum)  # total size of input array
     array_out = np.zeros((l - 1, 8))  # initialize output array
     pr = 0  # index of input array
@@ -83,7 +84,6 @@ def rainflow_count(data):
     a = np.empty((len(maximum), 2))  # temporary array for algorithm
 
     for i in range(l):
-
         j += 1  # increment "a" counter
         a[j] = maximum[pr]  # put turning point into temporary array
         pr += 1  # increment input array pointer
@@ -131,7 +131,7 @@ def rainflow_count(data):
                     array_out[po, 7] = 1.00
                     po += 1
 
-        # partial range
+    # partial range
     for i in range(j):
         lrange = np.fabs(a[i, 0] - a[i + 1, 0])
         mean = (a[i, 0] + a[i + 1, 0]) / 2.
@@ -151,35 +151,25 @@ def rainflow_count(data):
             array_out[po, 7] = uc_mult
             po += 1
 
-            # get rid of unused entries
+    # get rid of unused entries
     mask = np.ones(len(array_out), dtype=bool)
-
     for i in range(len(array_out)):
         if array_out[i, 7] == 0.0:
             mask[i] = False
     array_out = array_out[mask]
 
-    angles = [0]
-
+    # FIX: Calculate angles (uncomment and fix)
+    angles = []
     for i in range(len(array_out)):
-        n = array_out[i, 4] / array_out[i, 5]
-        new = np.arctan(n)
-        angles = np.vstack((angles, new))
-    angles = angles[1:]
-    angles = np.degrees(angles)
+        if array_out[i, 5] != 0:  # Avoid division by zero
+            n = array_out[i, 4] / array_out[i, 5]
+            new = np.arctan(n)
+            angles.append(np.degrees(new))
+        else:
+            angles.append(0.0)
+    
+    angles = np.array(angles)
     array_out = np.c_[array_out, angles]
-
-    """   angles=[]
-
-    for i in range(len(array_out)):
-        new=array_out[i,4]*10/array_out[i,5]
-        angles.append(new)
-        #else:
-          #  new=math.atan2(lg[i,0],lg[i,1])
-          #  angles.append(new)
-    angles=np.arctan(angles)
-    angles=np.degrees(angles)
-    array_out=np.c_[array_out,angles]"""
 
     def pers(binn, array):
         freq = np.zeros((len(binn), 1))
@@ -187,7 +177,7 @@ def rainflow_count(data):
         for k in range(len(binn) - 1):
             for i in range(len(array)):
                 if array[i] == binn[k] or binn[k] < array[i] < binn[k + 1]:
-                    freq[k] += 1  # how many times this(between the range of particular bin) occured
+                    freq[k] += 1
 
         for k in range(len(binn) - 1):
             for i in range(len(array)):
@@ -195,7 +185,8 @@ def rainflow_count(data):
                     persi[i] = freq[k]
         return persi
 
-    bins = int(1 // threshold)
+    # FIX: Use threshold parameter
+    bins = max(2, int(1 / threshold))  # Ensure at least 2 bins
     amp_bins = np.linspace(-1, 1, bins)
     a = array_out[:, 4]
     amp_pers = pers(amp_bins, a)
@@ -203,14 +194,17 @@ def rainflow_count(data):
     angle_bins = np.linspace(-90, 90, bins)
     angle_pers = pers(angle_bins, angles)
 
-    max_time = max(array_out[:, 5])
-    time_bins = np.linspace(1, max_time, bins)
-    b = array_out[:, 5]
-    time_pers = pers(time_bins, b)
+    if len(array_out) > 0:
+        max_time = max(array_out[:, 5])
+        time_bins = np.linspace(1, max_time, bins)
+        b = array_out[:, 5]
+        time_pers = pers(time_bins, b)
+    else:
+        time_pers = np.array([]).reshape(0, 1)
 
+    # Rest of the function...
     unique_amp = np.unique(array_out[:, 4:], axis=0)
 
-    # count of cycles with amplitude
     cycles = np.zeros((len(unique_amp), 1))
     for k in range(len(unique_amp)):
         for i in range(len(array_out)):
@@ -223,11 +217,11 @@ def rainflow_count(data):
             if array_out[i, 4] == unique_amp[k, 0]:
                 cyclecount[i] = cycles[k]
 
-    # persistance=np.hstack((amp_pers,time_pers,angle_pers,cyclecount))
     array_out = np.append(array_out, amp_pers, axis=1)
     array_out = np.append(array_out, time_pers, axis=1)
     array_out = np.append(array_out, angle_pers, axis=1)
     array_out = np.append(array_out, cyclecount, axis=1)
+    
     Array_out = pd.DataFrame(array_out,
                              columns=['w1', 'w2', 't1', 't2', '∆w_r', '∆t_r', 'σ_r', 'cycle', 'θ_r', 'amp_freq',
                                       'time_freq', 'angle_freq', 'cyclecount'])
@@ -236,27 +230,26 @@ def rainflow_count(data):
 
 def lam(events, threshold):
     """
-    finds the frequency of occurence of the attributes in events, in the bins they are in.
+    Finds the frequency of occurrence of the attributes in events, in the bins they are in.
     """
+    if events.empty:
+        return pd.DataFrame()
+
     number_of_bins = int(1 / threshold)
 
-    # stationary events
-    if len(events.columns) < 5:
-        lambdas = pd.DataFrame(columns=['λ(∆t_s)', 'λ(σ_s)', 'λ(∆t_s, σ_s)'])
+    # Ensure the DataFrame is clean
+    events = events.dropna(axis=1, how="all")
+    events.columns = events.columns.astype(str).str.strip()
 
-        deltat_bins = np.linspace(1, events[['∆t_s']].max(), number_of_bins)
-        sigma_bins = np.linspace(-1, 1, number_of_bins)
+    # Check if required columns exist
+    if '∆t_m' not in events.columns and '∆t_s' not in events.columns:
+        print("Error: Required columns ('∆t_m' or '∆t_s') missing from events DataFrame.")
+        return pd.DataFrame()
 
-        lambdas['λ(∆t_s)'] = frequencies(events[['∆t_s']], deltat_bins)
-        lambdas['λ(σ_s)'] = frequencies(events[['σ_s']], sigma_bins)
-
-        return lambdas
-
-    # major events
-    else:
+    # Major events
+    if '∆t_m' in events.columns:
         lambdas = pd.DataFrame(columns=['λ(∆t_m)', 'λ(∆w_m)', 'λ(θ_m)', 'λ(σ_m)', 'λ(σ_m, θ_m)'])
-
-        deltat_bins = np.linspace(1, events[['∆t_m']].max(), number_of_bins)
+        deltat_bins = np.linspace(1, events['∆t_m'].max(), number_of_bins)
         deltaw_bins = np.linspace(-1, 1, number_of_bins)
         theta_bins = np.linspace(-90, 90, number_of_bins)
         sigma_bins = np.linspace(-1, 1, number_of_bins)
@@ -266,7 +259,16 @@ def lam(events, threshold):
         lambdas['λ(θ_m)'] = frequencies(events[['θ_m']], theta_bins)
         lambdas['λ(σ_m)'] = frequencies(events[['σ_m']], sigma_bins)
 
-        return lambdas
+    # Stationary events
+    else:
+        lambdas = pd.DataFrame(columns=['λ(∆t_s)', 'λ(σ_s)', 'λ(∆t_s, σ_s)'])
+        deltat_bins = np.linspace(1, events['∆t_s'].max(), number_of_bins)
+        sigma_bins = np.linspace(-1, 1, number_of_bins)
+
+        lambdas['λ(∆t_s)'] = frequencies(events[['∆t_s']], deltat_bins)
+        lambdas['λ(σ_s)'] = frequencies(events[['σ_s']], sigma_bins)
+
+    return lambdas
 
 def frequencies(data, bins):
     f = len(bins) * [0]
@@ -274,24 +276,42 @@ def frequencies(data, bins):
 
     for k in range(len(bins) - 1):
         for i in range(len(data)):
-            if (bins[k] <= data.iloc[i]).bool() & (data.iloc[i] < bins[k + 1]).bool():
+            if (bins[k] <= data.iloc[i]).all() and (data.iloc[i] < bins[k + 1]).all():
                 f[k] += 1  # how many times this attribute occurred in this bin
 
     for k in range(len(bins) - 1):
         for i in range(len(data)):
-            if (bins[k] <= data.iloc[i]).bool() & (data.iloc[i] < bins[k + 1]).bool():
+            if (bins[k] <= data.iloc[i]).all() and (data.iloc[i] < bins[k + 1]).all():
                 frequency[i] = f[k]
     return frequency
 
 def save_xls(dict_df, path):
     """
-    Save a dictionary of dataframes to an excel file, with each dataframe as a seperate page
+    Save a dictionary of DataFrames to an Excel file, with each DataFrame as a separate sheet.
+    Ensures Excel is not corrupted even when all DataFrames are empty.
     """
-    writer = pd.ExcelWriter(path)
-    for key in dict_df:
-        dict_df[key].to_excel(writer, key)
-    writer.save()
+    from openpyxl import Workbook
 
+    try:
+        written = False
+        with pd.ExcelWriter(path, mode="w", engine="openpyxl") as writer:
+            for key, df in dict_df.items():
+                # If df is not empty and is a DataFrame
+                if isinstance(df, pd.DataFrame) and not df.empty:
+                    df.to_excel(writer, sheet_name=key[:31], index=False)  # Excel limits sheet name to 31 chars
+                    written = True
+                else:
+                    print(f"Warning: Sheet '{key}' is empty or invalid.")
+
+            # If nothing was written, write a default message sheet
+            if not written:
+                print(f"[Fallback] Writing fallback sheet to: {path}")
+                pd.DataFrame({'Message': ['No data available.']}).to_excel(writer, sheet_name='No_Data', index=False)
+
+        print(f"Excel saved at {path}")
+
+    except Exception as e:
+        print(f"Error writing to Excel: {e}")
 
 def pre_markov(significant_events, stationary_events):
     """

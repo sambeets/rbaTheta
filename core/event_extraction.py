@@ -1,155 +1,448 @@
 """
 RBA_theta searches for variations in a dataset within and above a given Threshold. 
-"""            
+"""   
+"""
+Enhanced event_extraction.py - Simplified version
+Key improvements: Adaptive parameters, better event detection, quality filtering
+Maintains ALL original function signatures
+"""         
 import pandas as pd
 import numpy as np
 from itertools import compress
 from core.helpers import lam
+from typing import Union, List
+from scipy import stats
+import logging
 
+logger = logging.getLogger(__name__)
 
-def significant_events(data, threshold):
+def significant_events(data: Union[np.ndarray, List], threshold: float, 
+                      min_duration: int = 3, min_slope: float = 0.05,
+                      window_minutes: int = 60, freq_secs: int = 3600) -> pd.DataFrame:
     """
-    Finds the Major(higher than amplitude) events
-    bins= number of bins that the range of parameters (∆a(-1,1), ∆t(1,max(∆t)), α(-90,90), mean(min(mean),max(mean))) will be divided into, to count the frequency of the events that fall into those bins
-
-    Args:
-        data: time series array
-        threshold: floating value
-        bins: integers
-
-    Returns: Major events with
-        t1: beginning point of the major event
-        t2: ending point of the major event
-        ∆t_m: time length of the major event
-        w_m(t1): amplitude at beginning of the major event
-        w_m(t2): amplitude at ending of the major event
-        ∆w_m: amplitude of the major event
-        θ_m: angle of the major event
-        σ_m: mean amplitude of the major event
+    Improved significant events detection with better ramp classification
     """
+    
+    if len(data) == 0:
+        return pd.DataFrame(columns=['t1', 't2', '∆t_m', 'w_m(t1)', 'w_m(t2)', '∆w_m', 'σ_m', 'θ_m'])
+    
+    data = np.array(data)
+    
+    # Enhanced preprocessing
+    data_std = np.std(data)
+    data_mean = np.mean(data)
+    
+    # Adaptive threshold with improved sensitivity
+    adaptive_threshold = threshold * (1.0 + (data_std / data_mean) * 0.15)
+    
+    # Improved ramp detection with better classification
+    events = _detect_ramps_improved(data, adaptive_threshold, min_duration, min_slope, window_minutes)
+    
+    # Convert to DataFrame
+    if events:
+        df = pd.DataFrame(events, columns=['t1', 't2', '∆t_m', 'w_m(t1)', 'w_m(t2)', '∆w_m', 'σ_m', 'θ_m'])
+        df = _filter_significant_events_improved(df, data)
+        return df.reset_index(drop=True)
+    else:
+        return pd.DataFrame(columns=['t1', 't2', '∆t_m', 'w_m(t1)', 'w_m(t2)', '∆w_m', 'σ_m', 'θ_m'])
 
-    prev = data[0]
-    delta = []
-    for item in data[1:]:
-        delta.append(item - prev)
-        prev = item
+def stationary_events(data: Union[np.ndarray, List], threshold: float,
+                     min_duration: int = 3, min_stationary_length: int = 7,
+                     window_minutes: int = 60, freq_secs: int = 3600) -> pd.DataFrame:
+    """
+    Refined stationary events detection - reduced over-extraction
+    """
+    
+    if len(data) == 0:
+        return pd.DataFrame(columns=['t1', 't2', '∆t_s', 'σ_s'])
+    
+    data = np.array(data)
+    
+    # DEBUG: Log the input threshold
+    logger.info(f"Stationary detection - Input threshold: {threshold:.6f}")
+    
+    data_std = np.std(data)
+    data_mean = np.mean(data)
+    
+    # Calculate a reasonable stationary threshold - STRICTER than before
+    base_stationary_threshold = data_std * 0.15  # Increased from 0.1 to 0.15
+    
+    # Make it more selective
+    if threshold < data_std * 0.001:  # If threshold is extremely small
+        effective_threshold = base_stationary_threshold
+        logger.info(f"Using data-driven threshold: {effective_threshold:.6f} (input was too small)")
+    else:
+        effective_threshold = max(threshold, base_stationary_threshold * 0.7)  # Increased from 0.5
+        logger.info(f"Using adjusted threshold: {effective_threshold:.6f}")
+    
+    # REFINED stationary detection with anti-ramp checking
+    events = _detect_stationary_refined(data, effective_threshold, min_stationary_length)
+    
+    logger.info(f"Stationary detection found {len(events)} raw events")
+    
+    # Convert to DataFrame with STRICTER filtering
+    if events:
+        df = pd.DataFrame(events, columns=['t1', 't2', '∆t_s', 'σ_s'])
+        df = _filter_stationary_refined(df, data)
+        logger.info(f"After filtering: {len(df)} stationary events")
+        return df.reset_index(drop=True)
+    else:
+        return pd.DataFrame(columns=['t1', 't2', '∆t_s', 'σ_s'])
 
+# ==================== SIGNIFICANT EVENT HELPERS ====================
+
+def _detect_ramps_improved(data, threshold, min_duration, min_slope, window_minutes):
+    """
+    Improved ramp detection with better direction classification
+    """
     events = []
-    start = 0
-    sign = lambda x: (1, -1)[x < 0]
-    length = len(delta)
-    next_delta = delta[1:]
-    next_delta.append(0)
+    n = len(data)
+    
+    if n < min_duration:
+        return events
+    
+    # Apply light smoothing to reduce noise but preserve ramps
+    smoothed_data = _light_smooth(data, window=3)
+    
+    # Calculate gradients for trend detection
+    gradients = np.gradient(smoothed_data)
+    
+    # Find potential ramp start points
+    significant_gradient_mask = np.abs(gradients) > min_slope
+    potential_starts = np.where(significant_gradient_mask)[0]
+    
+    i = 0
+    while i < len(potential_starts):
+        start_idx = potential_starts[i]
+        
+        # Look for ramp end within reasonable window
+        max_search = min(start_idx + window_minutes, n - 1)
+        
+        # Find the best ramp from this start point
+        best_ramp = _find_best_ramp_from_start(
+            smoothed_data, start_idx, max_search, min_duration, min_slope, threshold
+        )
+        
+        if best_ramp is not None:
+            events.append(best_ramp)
+            # Skip ahead to avoid overlapping detections
+            i = np.searchsorted(potential_starts, best_ramp[1]) + 1
+        else:
+            i += 1
+    
+    return events
 
-    for i in range(length):
-
-        if sign(delta[i]) == sign(next_delta[i]):
-
-            if i < length - 1:
-                continue
-            else:
-                new_event = [start, length, data[start], data[length]]
-                events.append(new_event)
-                break
-
-        new_event = [start, i + 1, data[start], data[i + 1]]
-        events.append(new_event)
-        start = i + 1
-
-    neglect = [False if abs(event[3] - event[2]) < threshold else True for event in events]
-    events_bigger_than_threshold = list(compress(events, neglect))
-
-    bigger_than_threshold_delta = []
-    for event in events_bigger_than_threshold:
-        bigger_than_threshold_delta.append(event[3] - event[2])
-
-    m_events = []
-    start = 0
-    length = len(bigger_than_threshold_delta)
-    next_delta = bigger_than_threshold_delta[1:]
-    next_delta.append(0)
-
-    for i in range(length):
-
-        if sign(bigger_than_threshold_delta[i]) == sign(next_delta[i]):
-
-            if i < length - 1:
-                continue
-            else:
-                new_event = [events_bigger_than_threshold[start][0],
-                             events_bigger_than_threshold[length - 1][1],
-                             events_bigger_than_threshold[start][2],
-                             events_bigger_than_threshold[length - 1][3]]
-                m_events.append(new_event)
-                break
-
-        new_event = [events_bigger_than_threshold[start][0],
-                     events_bigger_than_threshold[i][1],
-                     events_bigger_than_threshold[start][2],
-                     events_bigger_than_threshold[i][3]]
-        m_events.append(new_event)
-        start = i + 1
-
-    __significant_events = pd.DataFrame(columns=['t1', 't2', '∆t_m', 'w_m(t1)', 'w_m(t2)', '∆w_m', 'σ_m', 'θ_m'])
-    for event in m_events:
-        new_row = [event[0],
-                   event[1],
-                   event[1] - event[0],
-                   event[2],
-                   event[3],
-                   event[3] - event[2],
-                   (event[2] + event[3]) / 2,
-                   (np.arctan2((event[3] - event[2]) * 100, (event[1] - event[0]))) * 180 / np.pi]
-
-        __significant_events = __significant_events.append(pd.Series(new_row, index=__significant_events.columns), ignore_index=True)
-
-    lambdas = lam(__significant_events, threshold)
-    __significant_events = pd.concat([__significant_events, lambdas], axis=1)
-
-    return __significant_events
-
-
-def stationary_events(data, threshold):
+def _find_best_ramp_from_start(data, start_idx, max_end, min_duration, min_slope, threshold):
     """
-
-    Args:
-        data: time series
-        threshold: floting value
-
-    Returns: starting point, ending point, time persisted for stationary events
-
+    Find the best ramp starting from a given point
     """
-    __stationary_events = pd.DataFrame(columns=['t1', 't2', '∆t_s', 'σ_s'])
-    start = 0
-    length = len(data)
-    limit = threshold / 2
-
-    while start < length:  # to loop over the rest of the dataset
-
-        allowance = length - start
-        forward = 0
-
-        for i in range(1, allowance):
-            if data[start] - limit <= data[start + i] <= data[start] + limit:
-                forward += 1
+    best_ramp = None
+    best_score = 0
+    
+    # Try different end points
+    for end_idx in range(start_idx + min_duration, min(max_end + 1, len(data))):
+        segment = data[start_idx:end_idx + 1]
+        
+        if _is_valid_ramp_segment(segment, min_slope, threshold):
+            # Calculate ramp properties
+            delta_t = end_idx - start_idx
+            w_t1 = data[start_idx]
+            w_t2 = data[end_idx]
+            delta_w = w_t2 - w_t1
+            sigma = np.std(segment)
+            
+            # Calculate angle with improved precision
+            if delta_t > 0:
+                theta = np.arctan2(delta_w, delta_t) * 180 / np.pi
             else:
-                break
+                theta = 0.0
+            
+            # Score this ramp (prefer longer, more consistent ramps)
+            magnitude_score = abs(delta_w)
+            consistency_score = 1.0 / (1.0 + sigma)  # Lower sigma = higher score
+            duration_score = delta_t
+            
+            total_score = magnitude_score * consistency_score * np.sqrt(duration_score)
+            
+            if total_score > best_score:
+                best_score = total_score
+                best_ramp = [start_idx, end_idx, delta_t, w_t1, w_t2, delta_w, sigma, theta]
+    
+    return best_ramp
 
-        if forward > 0:
-            new_event = [start,
-                         start + forward,
-                         forward,
-                         sum(data[start: (start + forward + 1)]) / (forward + 1)]
+def _is_valid_ramp_segment(segment, min_slope, threshold):
+    """
+    Check if segment qualifies as a valid ramp
+    """
+    if len(segment) < 3:
+        return False
+    
+    # Check overall slope
+    overall_slope = abs(segment[-1] - segment[0]) / len(segment)
+    if overall_slope < min_slope:
+        return False
+    
+    # Check magnitude
+    max_change = np.max(np.abs(np.diff(segment)))
+    if max_change < threshold:
+        return False
+    
+    # Check consistency - ramp should be mostly monotonic
+    diffs = np.diff(segment)
+    if len(diffs) > 0:
+        # Determine primary direction
+        total_change = segment[-1] - segment[0]
+        if abs(total_change) < threshold:
+            return False
+        
+        primary_direction = 1 if total_change > 0 else -1
+        
+        # Count changes that go against the primary direction
+        contrary_changes = np.sum((diffs * primary_direction) < 0)
+        contrary_ratio = contrary_changes / len(diffs)
+        
+        # Allow some noise but reject if too many contrary changes
+        if contrary_ratio > 0.4:  # More than 40% contrary changes
+            return False
+    
+    return True
 
-            __stationary_events = __stationary_events.append(pd.Series(new_event, index=__stationary_events.columns),
-                                                             ignore_index=True)
+def _light_smooth(data, window=3):
+    """
+    Apply light smoothing to reduce noise while preserving ramps
+    """
+    if len(data) <= window:
+        return data
+    
+    # Use median filter for light smoothing
+    smoothed = np.copy(data)
+    half_window = window // 2
+    
+    for i in range(half_window, len(data) - half_window):
+        segment = data[i - half_window:i + half_window + 1]
+        smoothed[i] = np.median(segment)
+    
+    return smoothed
 
-        start += forward + 1
-    lambdas = lam(__stationary_events, threshold)
-    __stationary_events = pd.concat([__stationary_events, lambdas], axis=1)
+def _filter_significant_events_improved(df, original_data):
+    """
+    Improved filtering for significant events
+    """
+    if df.empty:
+        return df
+    
+    data_std = np.std(original_data)
+    data_length = len(original_data)
+    
+    # More refined filters
+    filters = []
+    
+    # Duration filter - reasonable range
+    min_duration = 2
+    max_duration = data_length * 0.15  # Allow longer events
+    filters.append((df['∆t_m'] >= min_duration) & (df['∆t_m'] <= max_duration))
+    
+    # Magnitude filter - must be significant
+    min_magnitude = data_std * 0.03  # Slightly lower threshold
+    filters.append(df['∆w_m'].abs() >= min_magnitude)
+    
+    # Angle filter - reasonable slopes
+    filters.append((df['θ_m'].abs() >= 0.5) & (df['θ_m'].abs() <= 89.5))
+    
+    # Consistency filter - sigma shouldn't be too high relative to change
+    max_sigma_ratio = 0.8  # Sigma should be less than 80% of magnitude
+    filters.append(df['σ_m'] <= df['∆w_m'].abs() * max_sigma_ratio)
+    
+    # Apply all filters
+    if filters:
+        combined_filter = filters[0]
+        for f in filters[1:]:
+            combined_filter = combined_filter & f
+        return df[combined_filter]
+    
+    return df
 
-    return __stationary_events
+#                   STATIONARY EVENT HELPERS
+# ====================================================================================
 
+def _detect_stationary_refined(data, threshold, min_length):
+    """
+    Refined stationary detection with anti-ramp checking and overlap prevention
+    """
+    events = []
+    n = len(data)
+    
+    if n < min_length:
+        return events
+    
+    # Use slightly larger window for better stability detection
+    window_size = max(8, min_length * 1.5)  # Increased window size
+    
+    logger.info(f"Using refined window size: {window_size} for {n} data points")
+    
+    # Pre-calculate rolling statistics
+    logger.info("Pre-calculating rolling statistics...")
+    
+    data_series = pd.Series(data)
+    rolling_std = data_series.rolling(window=int(window_size), min_periods=int(window_size//2)).std()
+    rolling_range = data_series.rolling(window=int(window_size), min_periods=int(window_size//2)).apply(
+        lambda x: x.max() - x.min(), raw=True
+    )
+    
+    # Calculate rolling slope to detect ramps (ANTI-RAMP check)
+    rolling_slope = data_series.rolling(window=int(window_size), min_periods=int(window_size//2)).apply(
+        lambda x: np.abs(np.polyfit(range(len(x)), x, 1)[0]) if len(x) >= 2 else 0, raw=True
+    )
+    
+    # STRICTER thresholds
+    std_threshold = threshold * 3.0   # Reduced from 5.0
+    range_threshold = threshold * 6.0  # Reduced from 10.0
+    slope_threshold = threshold * 0.5  # New: slope threshold to avoid ramps
+    
+    logger.info(f"Refined thresholds: std={std_threshold:.6f}, range={range_threshold:.6f}, slope={slope_threshold:.6f}")
+    
+    # Find stationary regions with anti-ramp checking
+    stationary_mask = (
+        (rolling_std <= std_threshold) & 
+        (rolling_range <= range_threshold) &
+        (rolling_slope <= slope_threshold)  # NEW: Must have low slope
+    ).fillna(False)
+    
+    logger.info(f"Found {stationary_mask.sum()} potentially stationary points (after anti-ramp check)")
+    
+    # Find contiguous stationary regions with gap handling
+    events = _find_refined_stationary_regions(stationary_mask.values, data, min_length)
+    
+    # Remove overlapping events
+    events = _remove_overlapping_stationary_events(events)
+    
+    logger.info(f"Refined stationary detection found {len(events)} events")
+    return events
+
+def _find_refined_stationary_regions(mask, data, min_length):
+    """
+    Find stationary regions with gap tolerance and minimum separation
+    """
+    events = []
+    n = len(mask)
+    
+    start = None
+    gap_tolerance = 3  # Allow small gaps in stationary periods
+    gap_count = 0
+    
+    for i in range(n):
+        if mask[i]:
+            if start is None:
+                start = i
+                gap_count = 0
+            else:
+                gap_count = 0  # Reset gap count
+        else:
+            if start is not None:
+                gap_count += 1
+                if gap_count > gap_tolerance:
+                    # End of stationary region
+                    end = i - gap_count
+                    duration = end - start
+                    if duration >= min_length:
+                        sigma_s = np.std(data[start:end])
+                        events.append([start, end, duration, sigma_s])
+                    start = None
+                    gap_count = 0
+    
+    # Handle case where stationary region extends to end
+    if start is not None:
+        end = n - gap_count if gap_count > 0 else n
+        duration = end - start
+        if duration >= min_length:
+            sigma_s = np.std(data[start:end])
+            events.append([start, end, duration, sigma_s])
+    
+    return events
+
+def _remove_overlapping_stationary_events(events):
+    """
+    Remove overlapping stationary events, keeping the most stable ones
+    """
+    if not events:
+        return events
+    
+    # Sort by start time
+    events.sort(key=lambda x: x[0])
+    
+    filtered_events = []
+    for event in events:
+        start, end, duration, sigma = event
+        
+        # Check for overlap with existing filtered events
+        overlaps = False
+        for existing in filtered_events:
+            existing_start, existing_end = existing[0], existing[1]
+            
+            # Check for any overlap
+            if not (end <= existing_start or start >= existing_end):
+                # There's overlap - keep the one with lower sigma (more stable)
+                if sigma < existing[3]:
+                    # Remove the existing event and add this one
+                    filtered_events.remove(existing)
+                    break
+                else:
+                    # Keep existing, skip this one
+                    overlaps = True
+                    break
+        
+        if not overlaps:
+            filtered_events.append(event)
+    
+    return filtered_events
+
+def _filter_stationary_refined(df, original_data):
+    """
+    Refined and stricter filtering for stationary events
+    """
+    if df.empty:
+        return df
+    
+    data_std = np.std(original_data)
+    data_length = len(original_data)
+    
+    logger.info(f"Filtering {len(df)} stationary events, data_std={data_std:.4f}")
+    
+    # STRICTER filters
+    filters = []
+    
+    # Duration filter - require meaningful length
+    min_duration = max(5, int(data_length * 0.001))  # At least 0.1% of data length
+    max_duration = data_length * 0.3  # Reduced from 0.7
+    duration_filter = (df['∆t_s'] >= min_duration) & (df['∆t_s'] <= max_duration)
+    filters.append(duration_filter)
+    
+    logger.info(f"Duration filter (min={min_duration}): {duration_filter.sum()} events pass")
+    
+    # Stability filter - much stricter
+    max_sigma = data_std * 0.4  # Reduced from 1.0 to 0.4
+    stability_filter = df['σ_s'] <= max_sigma
+    filters.append(stability_filter)
+    
+    logger.info(f"Stability filter (max_sigma={max_sigma:.4f}): {stability_filter.sum()} events pass")
+    
+    # Quality filter - remove events that are too short relative to their variability
+    quality_filter = df['∆t_s'] >= (df['σ_s'] * 10)  # Duration should be 10x the sigma
+    filters.append(quality_filter)
+    
+    logger.info(f"Quality filter: {quality_filter.sum()} events pass")
+    
+    # Apply all filters
+    if filters:
+        combined_filter = filters[0]
+        for f in filters[1:]:
+            combined_filter = combined_filter & f
+        
+        result = df[combined_filter]
+        logger.info(f"Final result: {len(result)} stationary events pass all filters")
+        return result
+    
+    return df
 
 def rainflow(data, threshold, flm=0, l_ult=1e16, uc_mult=0.5):
     """ Rainflow counting of a signal's turning points with Goodman correction

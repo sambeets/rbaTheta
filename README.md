@@ -1,48 +1,67 @@
 # <h1> rbaTheta: Ramping Behaviour Analysis
 
-Definition: A sudden change in time-varying data is termed as an event. For example a day (24 h) can be summed up with a few
-events than 24 points. This algorithm identifies the events and classifies them into stationary or significant events.
-An abrupt change is understood as significant event while a persistent event is a stationary. Rest of the data have little
-significace in context of decision making.
+**Definition**: A sudden change in time-varying data is termed as an event. For example, a day (24 h) can be summed up with a few
+events rather than 24 individual points. This algorithm identifies such events and classifies them into **stationary** or **significant** events.
+An abrupt change is understood as a **significant** event, while a persistent flat interval is classified as **stationary**. The rest of the data carry little
+importance in decision-making contexts.
 
-![rbaTheta](/plots/plotted_figures/RBAevents_new.png?raw=true)
+![rbaTheta](/plots/publication_figures/RBAevents_MCMC_0_150.png?raw=true)
 
-#### Directory organization
+---
 
-| Directory   | Files                                       | Description                             |
-| ----------- | ------------------------------------------- | --------------------------------------- |
-| core        | event_extraction.py , helpers.py , model.py | Contains the model and associated files |
-| input_data  | QGISfiles, Wind files                       | Input excel and shape files             |
-| plots       | plotted figures                             | plotting scripts and figures            |
-| simulations | test results and script to run tests        | fast_test.py is for a simple test       |
+### 🗂 Directory Organization
 
-#### How to run?
+| Directory / File                       | Description                                                                 |
+| ------------------------------------- | --------------------------------------------------------------------------- |
+| `core/`                               | Contains the full event detection pipeline and supporting scripts.          |
+| ├── `event_extraction.py`            | Core event segmentation logic (updated)                                     |
+| ├── `helpers.py`                     | Utility functions for signal processing and support                         |
+| ├── `model.py`                       | Enhanced model interface with parameter control and dynamic tuning          |
+| ├── `sensitivity.py`                 | Experiments on threshold robustness and sensitivity analysis                |
+| ├── `database.py`                    | SQLite-based event logging and signal trace management                      |
+| └── `other_baselines_for_testing/`   | Additional baseline implementations:                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;├── `classic_model.py` | Original RBAθ implementation from the cited literature             |
+| &nbsp;&nbsp;&nbsp;&nbsp;├── `cusum_method.py`       | CUSUM-based ramp detection              |
+| &nbsp;&nbsp;&nbsp;&nbsp;├── `swrt_method.py`        | SWRT method                        |                               |
+| `input_data/`                         | Contains test Excel files  shapefiles                     |
+| `plots/`                              | Figures and scripts to visualize output events                              |                             |
+| `simulations/`                        | Outputs will be saved in "all_tests_together" after simulation          |
+| `main.py`                             | Unified execution script — upgraded with full control and visualization     |
+| `metric_comparison.py`               | 📊 Primary script to compare performance metrics across all methods         |
 
-To run an experiment execute the main.py file. It calls the model and helpers from core folder and exectues as a parallel process. To verify that the execution was successful, look out for the a message stating how long it took to execute on terminal.
+---
 
-#### environment set up
+### ▶ How to Run
 
-Export OS agnostic and multiple package managers environment from Windows by
+To run an experiment:
 
-```
-conda env export --no-builds | findstr -v "prefix" > rba_non-spatial_environment.yml
-```
+`python main.py`
 
-create m_rba environment using conda with dependencies
+It calls the enhanced model and helper functions from the core/ directory and executes them using multiprocessing.
 
+For metric comparison of all methods after the simulation:
+
+`python metric_comparison.py`
+
+Upon completion, the console will display execution time and generate plots and comparison summaries.
+
+### Environment Setup
+
+Export cross-platform environment (from Windows):
+
+```conda env export --no-builds | findstr -v "prefix" > rba_non-spatial_environment.yml```
+
+Create a new conda environment:
 ```
 conda env create --name m_rba -f rba_non-spatial_environment.yml
+conda activate m_rba
 ```
 
-To run simulations execute
+### Citation and License
 
-```
-main.py
-```
+Please cite the below publication if you use this repository. The code is released under the MIT License, meaning users are free to use and modify it with explicit citation or written permission.
 
-#### **Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a explicit written permission or citation of the publication.**
-
-> [Mishra S, Ören E, Bordin C, Wen F, Palu I. Features extraction of wind ramp events from a virtual wind park. Energy Reports. 2020 Nov 1;6:237-49.](https://doi.org/10.1016/j.egyr.2020.08.047)
+[Mishra S, Ören E, Bordin C, Wen F, Palu I. Features extraction of wind ramp events from a virtual wind park. *Energy Reports*. 2020 Nov 1;6:237–49.](https://doi.org/10.1016/j.egyr.2020.08.047)
 
 ```
 @article{mishra2020features,
