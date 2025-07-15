@@ -1,10 +1,3 @@
-"""
-Publication-Ready Comprehensive Dashboard Visualization
-Advanced metric comparison for wind turbine event detection methods
-IEEE-standard academic visualization - ADAPTIVE VERSION
-Loads actual metrics from final_comparison.py analysis
-"""
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
