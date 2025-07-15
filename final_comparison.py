@@ -1,7 +1,6 @@
 """
 Focused Four Key Metrics Framework
-Publication-worthy comparison with exactly 4 critical metrics (removed computational efficiency)
-FIXED: Enhanced RBA Traditional and MCMC treated as separate methods
+Enhanced RBA Traditional and MCMC treated as separate methods
 """
 import pandas as pd
 import numpy as np
