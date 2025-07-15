@@ -27,7 +27,7 @@ importance in decision-making contexts.
 | `plots/`                              | Figures and scripts to visualize output events                              |                             |
 | `simulations/`                        | Outputs will be saved in "all_tests_together" after simulation          |
 | `main.py`                             | Unified execution script — upgraded with full control and visualization     |
-| `metric_comparison.py`               | 📊 Primary script to compare performance metrics across all methods         |
+| `metric_comparison.py`               | Primary script to compare performance metrics across all methods         |
 
 ---
 
