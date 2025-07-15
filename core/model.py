@@ -3,8 +3,7 @@
 
 """
 Enhanced model.py - Simplified version
-Core improvements: RF-based thresholding, dynamic parameters, no randomness
-Maintains ALL original function names and signatures
+Core improvements: RF-based mcmc thresholding, statistical method based thresholding, dynamic parameters, no randomness
 """
 
 #from giddy.markov import LISA_Markov, Spatial_Markov
