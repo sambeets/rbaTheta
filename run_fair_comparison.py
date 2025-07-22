@@ -1,3 +1,9 @@
+"""
+run_fair_comparison.py - FIXED VERSION
+Support both FIXED and ADAPTIVE baseline comparisons
+Publication-ready comparison framework
+"""
+
 import sys
 import os
 import time

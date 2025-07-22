@@ -1,7 +1,6 @@
 """
 Enhanced main.py - Multi-Method Comparison with Turbine-by-Turbine Results
 Runs Enhanced RBA-theta, Classic RBA-theta, CUSUM, SWRT, and Adaptive methods together
-Might need to adjust the paths-check before running
 Key improvements: Comprehensive comparison, unified timing, organized results BY TURBINE
 """
 

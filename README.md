@@ -1,69 +1,80 @@
-# <h1> rbaTheta: Ramping Behaviour Analysis
+# ⚡ rbaTheta+: Adaptive Ramping Behaviour Analysis with Event Filtering and SQLite Indexing
 
-**Definition**: A sudden change in time-varying data is termed as an event. For example, a day (24 h) can be summed up with a few
-events rather than 24 individual points. This algorithm identifies such events and classifies them into **stationary** or **significant** events.
-An abrupt change is understood as a **significant** event, while a persistent flat interval is classified as **stationary**. The rest of the data carry little
-importance in decision-making contexts.
-
-![rbaTheta](/plots/publication_figures/RBAevents_MCMC_0_150.png?raw=true)
+**rbaTheta+** is an enhanced version of the original RBATheta algorithm for detecting ramping events in wind power signals. It introduces adaptive thresholding (traditional and MCMC-based), robust data handling through SQLite, and a post-filtering mechanism to better distinguish stationary from significant events using a sliding window + log-based transformation.
 
 ---
 
-### 🗂 Directory Organization
+## 🔍 Problem Statement
 
-| Directory / File                       | Description                                                                 |
-| ------------------------------------- | --------------------------------------------------------------------------- |
-| `core/`                               | Contains the full event detection pipeline and supporting scripts.          |
-| ├── `event_extraction.py`            | Core event segmentation logic (updated)                                     |
-| ├── `helpers.py`                     | Utility functions for signal processing and support                         |
-| ├── `model.py`                       | Enhanced model interface with parameter control and dynamic tuning          |
-| ├── `sensitivity.py`                 | Experiments on threshold robustness and sensitivity analysis                |
-| ├── `database.py`                    | SQLite-based event logging and signal trace management                      |
-| └── `other_baselines_for_testing/`   | Additional baseline implementations:                                        |
-| &nbsp;&nbsp;&nbsp;&nbsp;├── `classic_model.py` | Original RBAθ implementation from the cited literature             |
-| &nbsp;&nbsp;&nbsp;&nbsp;├── `cusum_method.py`       | CUSUM-based ramp detection              |
-| &nbsp;&nbsp;&nbsp;&nbsp;├── `swrt_method.py`        | SWRT method                        |                               |
-| `input_data/`                         | Contains test Excel files  shapefiles                     |
-| `plots/`                              | Figures and scripts to visualize output events                              |                             |
-| `simulations/`                        | Outputs will be saved in "all_tests_together" after simulation          |
-| `main.py`                             | Unified execution script — upgraded with full control and visualization     |
-| `metric_comparison.py`               | Primary script to compare performance metrics across all methods         |
+Sudden or gradual variations in time-series data (such as wind energy output) can be categorized into **significant events** (sharp changes) and **stationary events** (persistent but stable). Most real-world decisions require only these events — the rest is noise.
 
 ---
 
-### ▶ How to Run
+## 🧠 Key Enhancements
 
-To run an experiment:
+- ✅ **Adaptive thresholding**: Traditional statistical & MCMC-based parameter selection  
+- ✅ **Sliding Window + Log Function**: Improves detection of stationary events  
+- ✅ **Post-filtering**: Reduces false positives after primary detection  
+- ✅ **SQLite integration**: Efficient data indexing and handling  
+- ✅ **Notebook-based evaluation**: F1-score, recall, and visualization of true/false positives
 
-`python main.py`
+---
 
-It calls the enhanced model and helper functions from the core/ directory and executes them using multiprocessing.
+## 📁 Directory Overview
 
-For metric comparison of all methods after the simulation:
+| Folder/File | Description |
+|-------------|-------------|
+| `core/` | Contains model logic (`event_extraction.py` with sliding window, log scaling, etc.) |
+| `simulations/` | Includes scripts and test results (e.g., `fast_test.py`) |
+| `plots/` | Output event visualizations, including MCMC and traditional comparisons |
+| `input_data/` | Original wind time-series and QGIS spatial data |
+| `RBA_theta_vis.ipynb` | Main visualization notebook (SQLite + post-filtering) |
+| `Visualization_SlidingWindow.ipynb` | Evaluation of stationary event detection logic |
 
-`python metric_comparison.py`
+---
 
-Upon completion, the console will display execution time and generate plots and comparison summaries.
+## ⚙️ How to Run
 
-### Environment Setup
+### 1. Run the Main Model
 
-Export cross-platform environment (from Windows):
-
-```conda env export --no-builds | findstr -v "prefix" > rba_non-spatial_environment.yml```
-
-Create a new conda environment:
+```bash
+python main.py
 ```
-conda env create --name m_rba -f rba_non-spatial_environment.yml
-conda activate m_rba
+
+It extracts events into an Excel file and logs runtime in terminal.
+
+2. Visualize and Evaluate
+Run the notebook: RBAtheta_vis_SQLite-Indexing.ipynb 
+
+This will:
+
+Load raw and event data from SQLite
+
+Apply post-filtering
+
+Compute approx recall, F1, TP/FP ratios
+
+Plot detected events
+
+---
+
+🧪 Environment Setup
+To replicate the full environment (non-spatial, cross-platform):
+
+```bash
+conda env create --name rba_env -f requirements.txt
+conda activate rba_env
+#Dependencies include simpy, pandas, matplotlib, sqlite3, and numpy.
 ```
 
-### Citation and License
+---
 
-Please cite the below publication if you use this repository. The code is released under the MIT License, meaning users are free to use and modify it with explicit citation or written permission.
+## 📝 Citation
 
-[Mishra S, Ören E, Bordin C, Wen F, Palu I. Features extraction of wind ramp events from a virtual wind park. *Energy Reports*. 2020 Nov 1;6:237–49.](https://doi.org/10.1016/j.egyr.2020.08.047)
+**Please cite the below publication as the source. The source code has a MIT liscence meaning users are free to modify and use only with a explicit written permission or citation of the publication.**
 
-```
+> [Mishra S, Ören E, Bordin C, Wen F, Palu I. Features extraction of wind ramp events from a virtual wind park. Energy Reports. 2020 Nov 1;6:237-49.](https://doi.org/10.1016/j.egyr.2020.08.047)
+
 @article{mishra2020features,
   title={Features extraction of wind ramp events from a virtual wind park},
   author={Mishra, Sambeet and {\"O}ren, Esin and Bordin, Chiara and Wen, Fushuan and Palu, Ivo},
@@ -73,4 +84,3 @@ Please cite the below publication if you use this repository. The code is releas
   year={2020},
   publisher={Elsevier}
 }
-```
