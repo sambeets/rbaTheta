@@ -56,6 +56,10 @@ conda env create --name m_rba -f rba_non-spatial_environment.yml
 conda activate m_rba
 ```
 
+### Release Note
+
+This is the version 0.2.0 that is the enhanced rbaTheta method. The original implementation can be found in release version 0.1.0.
+
 ### Citation and License
 
 Please cite the below publication if you use this repository. The code is released under the MIT License, meaning users are free to use and modify it with explicit citation or written permission.
