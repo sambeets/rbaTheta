@@ -24,6 +24,7 @@ importance in decision-making contexts.
 | ├── `swrt_method.py`        | SWRT method                        |                               |
 | `input_data/`                         | Contains test Excel files  shapefiles                     |
 | `plots/`                              | Figures and scripts to visualize output events                              |                             |
+| `Comparison_plots/`                              | Figures for comaparing different methods and their performance                              |                             |
 | `simulations/`                        | Outputs will be saved in "all_tests_together" after simulation          |
 | `main.py`                             | Unified execution script — upgraded with full control and visualization     |
 | `metric_comparison.py`               | 📊 Primary script to compare performance metrics across all methods         |
