@@ -17,16 +17,18 @@ PredRBAθ extends the classical RBA-theta algorithm with:
 ### 🗂 Directory Organization
 
 PredRBATheta/
-│
-├── 📁 core/                          # enhanced RBATheta core modules
-├── 📁 workflows/                     # event prediction workflows
-├── 📁 input_data/                    # Datasets
-├── 📁 simulations/                   # Event detection outputs saved in "all_tests_together" after simulation
-├── 📄 main_agentic.py                # MAIN ORCHESTRATOR - Unified execution script
-├── 📄 bootstrap_experience.py        # create synthetic previous experience database for main_agentic.py
-├── 📄 event_detector.py              # Event detection workflow (6 methods)
-├── 📄 requirements.txt               # Python dependencies
-├── 📄 README.md                      # readme file
+├── core/                       # Enhanced RBA-Theta core modules
+├── workflows/                  # Event prediction workflows
+├── input_data/                 # Datasets
+├── simulations/                # Event detection outputs
+│   └── all_tests_together/     # Consolidated outputs after simulation
+├── main_agentic.py             # MAIN orchestrator – unified execution script
+├── bootstrap_experience.py     # Creates synthetic prior-experience database
+│                                # used by main_agentic.py
+├── event_detector.py           # Event detection workflow (6 methods)
+├── requirements.txt            # Python dependencies
+└── README.md                   # Project documentation
+
 
 ---
 
