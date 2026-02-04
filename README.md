@@ -15,7 +15,7 @@ PredRBAθ extends the classical RBA-theta algorithm with:
 - Event Prediction(Extended Development)
 
 ### 🗂 Directory Organization
-
+```
 PredRBATheta/
 ├── core/                       # Enhanced RBA-Theta core modules
 ├── workflows/                  # Event prediction workflows
@@ -28,7 +28,7 @@ PredRBATheta/
 ├── event_detector.py           # Event detection workflow (6 methods)
 ├── requirements.txt            # Python dependencies
 └── README.md                   # Project documentation
-
+```
 
 ---
 
